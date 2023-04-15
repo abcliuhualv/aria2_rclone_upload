@@ -139,10 +139,10 @@ UPLOAD_FILE() {
 
 #注：
 #1.把rclone.env中RCLONE_TRANSFERS设置为1，记得把注释#删掉(大内存机器不用管，就用默认值4就好了)
-#2.在rclone.env中添加如下变量，以控制onedrive上传分片大小(不设置的话，分片大小则为默认的10M，越大占用内存越多，arm机器分片大小10M时上传较慢，amd机器还好)，也可通过--onedrive-chunk-size=50M来指定上传分片大小
-#	# 控制onedrive传输分片大小(默认10M，越大占用内存越多，arm机器设为10M时上传较慢，amd机器还好)，命令行可通过--onedrive-chunk-size=50M指定
+#2.在rclone.env中添加如下变量，以控制onedrive上传分片大小(默认10M，最大不能超过250M，越大占用内存越多，arm机器不设定参数即使用默认时上传较慢，amd机器还好)，也可通过--onedrive-chunk-size=50M来指定上传分片大小
+#	# 控制onedrive传输分片大小(默认10M，最大不能超过250M，越大占用内存越多，arm机器不设定参数即使用默认时上传较慢，amd机器还好)，命令行可通过--onedrive-chunk-size=50M指定
 #	RCLONE_ONEDRIVE_CHUNK_SIZE=50M
-#3.rclone.env内设置的参数是全局控制，不仅仅是影响aria2上传脚本upload.sh调用rclone时的各项参数，而是作用于任何调用rclone的时候。如果希望临时改变参数，可在调用rclone时指定具体参数，如--transfers=2 --onedrive-chunk-size=50M
+#3.rclone.env内设置的参数仅仅是aria2下载完成后上传时有效，自己shell运行rclone或其他除aria2以外的程序调用rclone时，rclone.env里设置的这些参数并不会生效，需要自己在命令行通过--transfers=2 --onedrive-chunk-size=50M等指定
 #4.修改aria2的最大同时下载任务数，即把aria2.conf中max-concurrent-downloads改为3
 #5.可以设置不进入队列的文件大小FILE_SIZE_LIMIT_OF_NO_QUEUE，默认为10M，但文件夹一定进入队列
 #6.可以设置rclone上传任务的并行数量MAX_RCLONE_UPLOAD_NUM，默认为2,该参数只能控制rclone的任务数量，不能控制rclone单个任务中同时上传的文件数量，rclone单个任务中同时上传的文件数量通过rclone.env中的RCLONE_TRANSFERS参数(默认为4)控制
